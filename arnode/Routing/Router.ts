@@ -1,4 +1,4 @@
-import {Route} from "./Route";
+import { Route } from "./Route";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
@@ -13,7 +13,6 @@ export class Router implements IRouter {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
-
         this.routes.GET.push(route);
     }
 
@@ -21,7 +20,6 @@ export class Router implements IRouter {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
-
         this.routes.POST.push(route);
     }
 
@@ -29,9 +27,28 @@ export class Router implements IRouter {
         return Object.keys(this.routes).includes(method);
     }
 
+    private matchRoute(routePath: string, requestPath: string) {
+        const route = routePath.substring(1).split("/");
+        const request = requestPath.substring(1).split("/");
+
+        if (route.length != request.length) {
+            return false;
+        }
+
+        const checkRoutes = route.every((route: string, index: number) => {
+            if (route.includes(":")) {
+                const parameterKey = route.substring(1);
+                const parameterValue = request[index];
+            }
+            return route === request[index];
+        });
+
+        return true;
+    }
+
     private getMatchedRoute(method: string, path: string) {
         return this.routes[method].find((route: Route) => {
-            return route.getPath() === path;
+            return this.matchRoute(route.getPath(), path);
         });
     }
 
