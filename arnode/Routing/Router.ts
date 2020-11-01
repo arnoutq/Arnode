@@ -1,14 +1,14 @@
 import { Route } from "./Route";
 
 export interface IRouter {
-    addGet(path: string, callback: Function);
-    addPost(path: string, callback: Function);
+    addGet(path: string, callback: Function): void;
+    addPost(path: string, callback: Function): void;
 }
 
 export class Router implements IRouter {
     private routes: { GET: Array<Route>, POST: Array<Route>} = {GET: [], POST: []};
 
-    public addGet(path: string, callback: Function) {
+    public addGet(path: string, callback: Function): void {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
@@ -16,7 +16,7 @@ export class Router implements IRouter {
         this.routes.GET.push(route);
     }
 
-    public addPost(path: string, callback: Function) {
+    public addPost(path: string, callback: Function): void {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
@@ -24,8 +24,15 @@ export class Router implements IRouter {
         this.routes.POST.push(route);
     }
 
-    public isValidMethod(method: string) {
+    private isValidMethod(method: string): boolean {
         return Object.keys(this.routes).includes(method);
+    }
+
+    public run(method: string) {
+        const isValidMethod = this.isValidMethod(method);
+        if (!isValidMethod) {
+            throw new Error("Method is not valid");
+        }
     }
 
 }
