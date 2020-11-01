@@ -25,7 +25,7 @@ export class Application implements IApplication {
     }
 
     private listener = (req: IncomingMessage, res: ServerResponse) => {
-        this.router.run(req.method);
+        this.router.run(req.method, req.url);
     }
 
     public listen(port: number, host: string = "localhost"): void {
