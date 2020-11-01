@@ -24,8 +24,12 @@ export class Application implements IApplication {
         this.router.addPost(path, callback);
     }
 
-    private listener(req: IncomingMessage, res: ServerResponse): void {
-        console.log(req.url);
+    private listener = (req: IncomingMessage, res: ServerResponse) => {
+        const isValidMethod = this.router.isValidMethod(req.method);
+        if (!isValidMethod) {
+            res.writeHead(404);
+            res.end("Not a valid method");
+        }
     }
 
     public listen(port: number, host: string = "localhost"): void {

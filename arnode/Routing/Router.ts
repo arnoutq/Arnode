@@ -24,4 +24,8 @@ export class Router implements IRouter {
         this.routes.POST.push(route);
     }
 
+    public isValidMethod(method: string) {
+        return Object.keys(this.routes).includes(method);
+    }
+
 }
