@@ -1,0 +1,9 @@
+{
+  "name": "arnode",
+  "version": "1.0.0",
+  "description": "A lightweight Node.js web framework",
+  "main": "index.js",
+  "repository": "https://github.com/arnoutq/Arnode.git",
+  "author": "Arnout Quint",
+  "license": "MIT"
+}
