@@ -8,5 +8,8 @@
   "main": "app.ts",
   "repository": "https://github.com/arnoutq/Arnode.git",
   "author": "Arnout Quint",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "@types/node": "^14.14.6"
+  }
 }
