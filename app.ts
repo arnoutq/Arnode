@@ -3,7 +3,7 @@ import { Router } from "./arnode/Routing/Router";
 
 const app = new Application(new Router());
 
-app.get("/", ()=> {});
-app.get("/test/:id", ()=> {});
+app.get("/", ()=> { console.log("test1") });
+app.get("/test/:id", ()=> { console.log("test2") });
 
 app.listen(8080);

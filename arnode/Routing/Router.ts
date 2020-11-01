@@ -46,10 +46,14 @@ export class Router implements IRouter {
         });
     }
 
-    private getMatchedRoute(method: string, path: string) {
+    private getMatchedRoute(method: string, path: string): Route | undefined {
         return this.routes[method].find((route: Route) => {
             return this.matchRoute(route, path);
         });
+    }
+
+    private call(callback: Function, parameters: { [key: string]: string }) {
+        callback();
     }
 
     public run(method: string, path: string) {
@@ -61,7 +65,7 @@ export class Router implements IRouter {
         if (!matchedRoute) {
             throw new Error("Route not found");
         }
-        console.log(matchedRoute);
+        this.call(matchedRoute.getCallback(), matchedRoute.getParameters());
     }
 
 }
