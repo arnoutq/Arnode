@@ -1,5 +1,6 @@
 export interface IRouter {
     addGet(path: string, callback: Function);
+    addPost(path: string, callback: Function);
 }
 
 export class Router implements IRouter {
@@ -8,6 +9,9 @@ export class Router implements IRouter {
     constructor() {}
 
     public addGet(path: string, callback: Function) {
+    }
+
+    public addPost(path: string, callback: Function) {
     }
 
 }
