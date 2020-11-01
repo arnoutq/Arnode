@@ -1,4 +1,4 @@
-import { Route } from "./Route";
+import {Route} from "./Route";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
@@ -27,28 +27,28 @@ export class Router implements IRouter {
         return Object.keys(this.routes).includes(method);
     }
 
-    private matchRoute(routePath: string, requestPath: string) {
-        const route = routePath.substring(1).split("/");
-        const request = requestPath.substring(1).split("/");
+    private matchRoute(route: Route, requestPath: string) {
+        const pathPieces = route.getPath().substring(1).split("/");
+        const requestPathPieces = requestPath.substring(1).split("/");
 
-        if (route.length != request.length) {
+        if (pathPieces.length != requestPathPieces.length) {
             return false;
         }
 
-        const checkRoutes = route.every((route: string, index: number) => {
-            if (route.includes(":")) {
-                const parameterKey = route.substring(1);
-                const parameterValue = request[index];
+        return pathPieces.every((pathPiece: string, index: number) => {
+            if (pathPiece.includes(":")) {
+                const parameterKey = pathPiece.substring(1);
+                const parameterValue = requestPathPieces[index];
+                route.setParameter(parameterKey, parameterValue);
+                return true;
             }
-            return route === request[index];
+            return pathPiece === requestPathPieces[index];
         });
-
-        return true;
     }
 
     private getMatchedRoute(method: string, path: string) {
         return this.routes[method].find((route: Route) => {
-            return this.matchRoute(route.getPath(), path);
+            return this.matchRoute(route, path);
         });
     }
 
@@ -61,6 +61,7 @@ export class Router implements IRouter {
         if (!matchedRoute) {
             throw new Error("Route not found");
         }
+        console.log(matchedRoute);
     }
 
 }

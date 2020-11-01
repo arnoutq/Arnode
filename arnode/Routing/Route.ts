@@ -10,7 +10,7 @@ export interface IRoute {
 export class Route implements IRoute {
     private path: string;
     private callback: Function;
-    private parameters: { [key: string]: string };
+    private parameters: { [key: string]: string } = {};
 
     public setPath(path: string): void {
         this.path = path;
