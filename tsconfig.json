@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "strict": true,
+    "target": "es6",
+    "module": "commonjs",
+    "outDir": "./dist",
+    "baseUrl": "./arnode",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "strictPropertyInitialization": false,
+    "esModuleInterop": true,
+    "strictFunctionTypes": true
+  },
+  "include": [
+    "./arnode/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules", "./arnode/**/*.test.ts"
+  ]
+}

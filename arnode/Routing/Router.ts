@@ -23,8 +23,10 @@ export class Router implements IRouter {
         this.routes.POST.push(route);
     }
 
-    private isValidMethod(method: string): boolean {
-        return Object.keys(this.routes).includes(method);
+    private getValidMethod(method: string): "GET" | "POST" | undefined {
+        return Object.keys(this.routes).find((key: string) => {
+            return key === method;
+        }) as "GET" | "POST";
     }
 
     private matchRoute(route: Route, requestPath: string) {
@@ -46,7 +48,7 @@ export class Router implements IRouter {
         });
     }
 
-    private getMatchedRoute(method: string, path: string): Route | undefined {
+    private getMatchedRoute(method: "GET" | "POST", path: string): Route | undefined | false {
         return this.routes[method].find((route: Route) => {
             return this.matchRoute(route, path);
         });
@@ -56,12 +58,19 @@ export class Router implements IRouter {
         callback();
     }
 
-    public run(method: string, path: string) {
-        const isValidMethod = this.isValidMethod(method);
-        if (!isValidMethod) {
+    public run(method: string | undefined, path: string | undefined) {
+        if (!path) {
+            throw new Error("path is not defined");
+        }
+        if (!method) {
+            throw new Error("Method is not defined");
+        }
+
+        const validMethod = this.getValidMethod(method);
+        if (!validMethod) {
             throw new Error("Method is not valid");
         }
-        const matchedRoute = this.getMatchedRoute(method, path);
+        const matchedRoute = this.getMatchedRoute(validMethod, path);
         if (!matchedRoute) {
             throw new Error("Route not found");
         }
