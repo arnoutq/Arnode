@@ -42,7 +42,10 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    private call(callback: Function, parameters: { [key: string]: string }) {
+    private call(middleware: Function, callback: Function, parameters: { [key: string]: string }) {
+        if (typeof middleware === "function") {
+            middleware();
+        }
         const request = new Request(parameters);
         callback(request);
     }
@@ -63,7 +66,7 @@ export class Router implements IRouter {
         if (!matchedRoute) {
             throw new Error("Route not found");
         }
-        this.call(matchedRoute.getCallback(), matchedRoute.getParameters());
+        this.call(matchedRoute.getMiddleware(), matchedRoute.getCallback(), matchedRoute.getParameters());
     }
 
 }
