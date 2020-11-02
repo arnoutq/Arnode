@@ -23,10 +23,12 @@ export class Router implements IRouter {
         this.routes.POST.push(route);
     }
 
-    private getValidMethod(method: string): "GET" | "POST" | undefined {
-        return Object.keys(this.routes).find((key: string) => {
-            return key === method;
-        }) as "GET" | "POST";
+    private getValidMethod(method: string): "GET" | "POST" | false {
+        const isValidMethod = Object.keys(this.routes).includes(method);
+        if (!isValidMethod) {
+            return false;
+        }
+        return method as "GET" | "POST";
     }
 
     private matchRoute(route: Route, requestPath: string) {
