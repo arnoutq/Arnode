@@ -1,4 +1,5 @@
 import {Route} from "./Route";
+import {Request} from "../http/Request";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
@@ -57,7 +58,8 @@ export class Router implements IRouter {
     }
 
     private call(callback: Function, parameters: { [key: string]: string }) {
-        callback();
+        const request = new Request(parameters);
+        callback(request);
     }
 
     public run(method: string | undefined, path: string | undefined) {
