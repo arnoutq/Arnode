@@ -1,5 +1,6 @@
 import {Route} from "./Route";
 import {Request} from "../http/Request";
+import {RouteMatch} from "./RouteMatch";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
@@ -9,6 +10,11 @@ export interface IRouter {
 
 export class Router implements IRouter {
     private routes: { GET: Array<Route>, POST: Array<Route>} = {GET: [], POST: []};
+    private routeMatch: RouteMatch;
+
+    constructor(routeMatch: RouteMatch) {
+        this.routeMatch = routeMatch;
+    }
 
     public addGet(path: string, callback: Function): void {
         const route = new Route();
@@ -32,31 +38,6 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    private matchRoute(route: Route, requestPath: string) {
-        const pathPieces = route.getPath().substring(1).split("/");
-        const requestPathPieces = requestPath.substring(1).split("/");
-
-        if (pathPieces.length != requestPathPieces.length) {
-            return false;
-        }
-
-        return pathPieces.every((pathPiece: string, index: number) => {
-            if (pathPiece.includes(":")) {
-                const parameterKey = pathPiece.substring(1);
-                const parameterValue = requestPathPieces[index];
-                route.setParameter(parameterKey, parameterValue);
-                return true;
-            }
-            return pathPiece === requestPathPieces[index];
-        });
-    }
-
-    private getMatchedRoute(method: "GET" | "POST", path: string): Route | undefined | false {
-        return this.routes[method].find((route: Route) => {
-            return this.matchRoute(route, path);
-        });
-    }
-
     private call(callback: Function, parameters: { [key: string]: string }) {
         const request = new Request(parameters);
         callback(request);
@@ -74,7 +55,7 @@ export class Router implements IRouter {
         if (!validMethod) {
             throw new Error("Method is not valid");
         }
-        const matchedRoute = this.getMatchedRoute(validMethod, path);
+        const matchedRoute = this.routeMatch.getMatchedRoute(this.routes, validMethod, path);
         if (!matchedRoute) {
             throw new Error("Route not found");
         }
