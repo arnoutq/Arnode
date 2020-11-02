@@ -33,7 +33,13 @@ export class Application implements IApplication {
     }
 
     private listener = (req: IncomingMessage, res: ServerResponse) => {
-        this.router.run(req.method, req.url);
+        if (req.url === '/favicon.ico') {
+            res.writeHead(200, {'Content-Type': 'image/x-icon'} );
+            res.end();
+            return;
+        }
+
+        this.router.run(req.method, req.url, res);
     }
 
     public listen(port: number, host: string = "localhost"): void {

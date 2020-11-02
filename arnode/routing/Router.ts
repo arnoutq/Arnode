@@ -1,11 +1,13 @@
 import {Route} from "./Route";
 import {Request} from "../http/Request";
 import {RouteMatch} from "./RouteMatch";
+import {ServerResponse} from "http";
+import {Response} from "../http/Response";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
     addPost(path: string, callback: Function): void;
-    run(method: string | undefined, path: string | undefined): void;
+    run(method: string | undefined, path: string | undefined, res: ServerResponse): void;
 }
 
 export class Router implements IRouter {
@@ -42,15 +44,16 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    private call(middleware: Function | undefined, callback: Function, parameters: { [key: string]: string } | {}) {
+    private call(middleware: Function | undefined, callback: Function, parameters: { [key: string]: string } | {}, res: ServerResponse) {
         if (typeof middleware === "function") {
             middleware();
         }
         const request = new Request(parameters);
-        callback(request);
+        const response = new Response(res);
+        return callback(request, response);
     }
 
-    public run(method: string | undefined, path: string | undefined) {
+    public run(method: string | undefined, path: string | undefined, res: ServerResponse) {
         if (!path) {
             throw new Error("path is not defined");
         }
@@ -64,9 +67,9 @@ export class Router implements IRouter {
         }
         const matchedRoute = this.routeMatch.getMatchedRoute(this.routes, validMethod, path);
         if (!matchedRoute) {
-            throw new Error("Route not found");
+            throw new Error("Route not found: " + path);
         }
-        this.call(matchedRoute.getMiddleware(), matchedRoute.getCallback(), matchedRoute.getParameters());
+        this.call(matchedRoute.getMiddleware(), matchedRoute.getCallback(), matchedRoute.getParameters(), res);
     }
 
 }
