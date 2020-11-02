@@ -42,7 +42,7 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    private call(middleware: Function, callback: Function, parameters: { [key: string]: string }) {
+    private call(middleware: Function | undefined, callback: Function, parameters: { [key: string]: string } | {}) {
         if (typeof middleware === "function") {
             middleware();
         }

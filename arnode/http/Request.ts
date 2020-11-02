@@ -5,7 +5,7 @@ export interface IRequest {
 export class Request implements IRequest {
     private queryParameters: { [key: string]: string } = {};
 
-    constructor(queryParameters: { [key: string]: string }) {
+    constructor(queryParameters: { [key: string]: string } | {}) {
         this.queryParameters = queryParameters;
     }
 
