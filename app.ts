@@ -8,7 +8,10 @@ const app = new Application(new Router(new RouteMatch()));
 
 app.get("/", ()=> { console.log("test1") }).middleware(() => { console.log("middleware1") });
 app.get("/test/:id/:id2", (req: Request, res: Response)=> {
-    res.html("<h1>test</h1>");
+    res.html("<form method='POST' action='/test'><input name='testform'><input name='testform2'><button type='submit'>Submit</button></form>");
 }).middleware(() => { console.log("middleware2") });
+
+app.post("/test", ()=> { console.log("test1") });
+
 
 app.listen(8080);
