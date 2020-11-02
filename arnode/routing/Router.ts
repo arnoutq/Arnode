@@ -44,13 +44,19 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    private call(middleware: Function | undefined, callback: Function, parameters: { [key: string]: string } | {}, res: ServerResponse) {
+    private call(middleware: Function | undefined, callback: Function, request: Request, response: Response) {
         if (typeof middleware === "function") {
             middleware();
         }
-        const request = new Request(parameters);
-        const response = new Response(res);
         return callback(request, response);
+    }
+
+    private getRequestClass(req: IncomingMessage, parameters: { [key: string]: string } | {}) {
+        return new Request(req, parameters);
+    }
+
+    private getResponseClass(res: ServerResponse) {
+        return new Response(res);
     }
 
     public run(req: IncomingMessage, res: ServerResponse) {
@@ -72,7 +78,11 @@ export class Router implements IRouter {
         if (!matchedRoute) {
             throw new Error("Route not found: " + path);
         }
-        this.call(matchedRoute.getMiddleware(), matchedRoute.getCallback(), matchedRoute.getParameters(), res);
+
+        const request = this.getRequestClass(req, matchedRoute.getParameters());
+        const response = this.getResponseClass(res);
+
+        this.call(matchedRoute.getMiddleware(), matchedRoute.getCallback(), request, response);
     }
 
 }

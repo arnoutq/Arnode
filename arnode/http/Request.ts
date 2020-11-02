@@ -1,11 +1,15 @@
+import {IncomingMessage} from "http";
+
 export interface IRequest {
     query(parameterKey: string): false | string;
 }
 
 export class Request implements IRequest {
     private queryParameters: { [key: string]: string } = {};
+    private request: IncomingMessage;
 
-    constructor(queryParameters: { [key: string]: string } | {}) {
+    constructor(request: IncomingMessage, queryParameters: { [key: string]: string } | {}) {
+        this.request = request;
         this.queryParameters = queryParameters;
     }
 
