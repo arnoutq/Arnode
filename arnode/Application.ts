@@ -1,5 +1,5 @@
 import * as http from "http";
-import { Router } from "./Routing/Router";
+import { Router } from "./routing/Router";
 import { IncomingMessage, ServerResponse } from "http";
 
 export interface IApplication {

@@ -3,7 +3,7 @@ import {Route} from "./Route";
 export interface IRouter {
     addGet(path: string, callback: Function): void;
     addPost(path: string, callback: Function): void;
-    run(method: string, path: string): void;
+    run(method: string | undefined, path: string | undefined): void;
 }
 
 export class Router implements IRouter {

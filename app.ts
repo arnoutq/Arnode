@@ -1,5 +1,5 @@
 import { Application } from "./arnode/Application";
-import { Router } from "./arnode/Routing/Router";
+import { Router } from "./arnode/routing/Router";
 
 const app = new Application(new Router());
 
