@@ -39,7 +39,7 @@ export class Application implements IApplication {
             return;
         }
 
-        this.router.run(req.method, req.url, res);
+        this.router.run(req, res);
     }
 
     public listen(port: number, host: string = "localhost"): void {

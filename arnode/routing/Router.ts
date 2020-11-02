@@ -1,13 +1,13 @@
 import {Route} from "./Route";
 import {Request} from "../http/Request";
 import {RouteMatch} from "./RouteMatch";
-import {ServerResponse} from "http";
+import {IncomingMessage, ServerResponse} from "http";
 import {Response} from "../http/Response";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;
     addPost(path: string, callback: Function): void;
-    run(method: string | undefined, path: string | undefined, res: ServerResponse): void;
+    run(req: IncomingMessage, res: ServerResponse): void;
 }
 
 export class Router implements IRouter {
@@ -53,7 +53,10 @@ export class Router implements IRouter {
         return callback(request, response);
     }
 
-    public run(method: string | undefined, path: string | undefined, res: ServerResponse) {
+    public run(req: IncomingMessage, res: ServerResponse) {
+        const path = req.url;
+        const method = req.method;
+
         if (!path) {
             throw new Error("path is not defined");
         }
