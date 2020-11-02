@@ -5,12 +5,15 @@ export interface IRoute {
     getCallback(): Function;
     setParameter(parameterKey: string, parameterValue: string): void;
     getParameters(): { [key: string]: string };
+    setMiddleware(middleware: Function): void;
+    getMiddleware(): Function;
 }
 
 export class Route implements IRoute {
     private path: string;
     private callback: Function;
     private parameters: { [key: string]: string } = {};
+    private middleware: Function;
 
     public setPath(path: string): void {
         this.path = path;
@@ -34,6 +37,14 @@ export class Route implements IRoute {
 
     public getParameters(): { [key: string]: string } {
         return this.parameters;
+    }
+
+    public setMiddleware(middleware: Function): void {
+        this.middleware = middleware;
+    }
+
+    public getMiddleware(): Function {
+        return this.middleware;
     }
 
 }

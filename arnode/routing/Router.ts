@@ -16,18 +16,22 @@ export class Router implements IRouter {
         this.routeMatch = routeMatch;
     }
 
-    public addGet(path: string, callback: Function): void {
+    public addGet(path: string, callback: Function): Route {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
         this.routes.GET.push(route);
+
+        return route;
     }
 
-    public addPost(path: string, callback: Function): void {
+    public addPost(path: string, callback: Function): Route {
         const route = new Route();
         route.setPath(path);
         route.setCallback(callback);
         this.routes.POST.push(route);
+
+        return route;
     }
 
     private getValidMethod(method: string): "GET" | "POST" | false {

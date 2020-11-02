@@ -9,6 +9,6 @@ app.get("/", ()=> { console.log("test1") });
 app.get("/test/:id/:id2", (req: Request)=> {
     console.log(req.query("id"));
     console.log(req.query("id2"));
-});
+}).middleware(() => { console.log("middleware") });
 
 app.listen(8080);
