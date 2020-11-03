@@ -2,25 +2,14 @@ import {IncomingMessage} from "http";
 import qs from 'qs';
 import QueryString from "qs";
 
-export interface IRequest {
-    query(parameterKey: string): false | string;
-}
-
-export class Request implements IRequest {
-    private queryParameters: { [key: string]: string } = {};
+export class Request {
     private request: IncomingMessage;
+    public query: { [key: string]: string } = {};
     public body: QueryString.ParsedQs;
 
     constructor(request: IncomingMessage, queryParameters: { [key: string]: string } | {}, body: string | '') {
         this.request = request;
-        this.queryParameters = queryParameters;
+        this.query = queryParameters;
         this.body = qs.parse(body);
-    }
-
-    public query(parameterKey: string): false | string {
-        if  (!(parameterKey in this.queryParameters)) {
-            return false;
-        }
-        return this.queryParameters[parameterKey];
     }
 }
