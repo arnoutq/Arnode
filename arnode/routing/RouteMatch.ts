@@ -1,7 +1,7 @@
 import {Route} from "./Route";
 
 export interface IRouteMatch {
-    getMatchedRoute(routes: { GET: Array<Route>, POST: Array<Route>}, method: "GET" | "POST", path: string): Route | undefined;
+    getMatchedRoute(routes: { GET: Array<Route>, POST: Array<Route>}, method: "GET" | "POST", path: string): Route;
 }
 
 export class RouteMatch implements IRouteMatch {
@@ -25,10 +25,14 @@ export class RouteMatch implements IRouteMatch {
         });
     }
 
-    public getMatchedRoute(routes: { GET: Array<Route>, POST: Array<Route>}, method: "GET" | "POST", path: string): Route | undefined {
-        return routes[method].find((route: Route) => {
+    public getMatchedRoute(routes: { GET: Array<Route>, POST: Array<Route>}, method: "GET" | "POST", path: string): Route {
+        const matchedRoute = routes[method].find((route: Route) => {
             return this.matchRoute(route, path);
         });
+        if (!matchedRoute) {
+            throw new Error("Route not found: " + path);
+        }
+        return matchedRoute;
     }
 
 }

@@ -77,10 +77,6 @@ export class Router implements IRouter {
         }
 
         const matchedRoute = this.routeMatch.getMatchedRoute(this.routes, method, path);
-        if (!matchedRoute) {
-            throw new Error("Route not found: " + path);
-        }
-
         const request = this.getRequestClass(req, matchedRoute.getParameters(), body);
         const response = this.getResponseClass(res);
 
