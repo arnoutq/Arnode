@@ -1,7 +1,8 @@
 import {ServerResponse} from "http";
 
 export interface IResponse {
-    html(htmlCode: string): void;
+    html(htmlCode: string, statusCode: number): void;
+    json(json: object, statusCode: number): void;
 }
 
 export class Response implements IResponse {
@@ -11,16 +12,16 @@ export class Response implements IResponse {
         this.response = response;
     }
 
-    public html(htmlCode: string): void {
+    public html(htmlCode: string, statusCode: number = 200): void {
         const res = this.response;
-        res.writeHead(200, {'Content-Type': 'text/html'});
+        res.writeHead(statusCode, {'Content-Type': 'text/html'});
         res.write(htmlCode);
         res.end();
     }
 
-    public json(json: object): void {
+    public json(json: object, statusCode: number = 200): void {
         const res = this.response;
-        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.writeHead(statusCode, {'Content-Type': 'application/json'});
         res.write(JSON.stringify(json));
         res.end();
     }
