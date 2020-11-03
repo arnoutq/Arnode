@@ -11,7 +11,7 @@ app.get("/test/:id/:id2", (req: Request, res: Response)=> {
     res.html("<form method='POST' action='/test'><input name='testform'><input name='testform2'><button type='submit'>Submit</button></form>");
 }).middleware(() => { console.log("middleware2") });
 
-app.post("/test", ()=> { console.log("test1") });
+app.post("/test", (req: Request)=> { console.log(req.body.testform) });
 
 
 app.listen(8080);
