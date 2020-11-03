@@ -1,7 +1,6 @@
 # Arnode
 > A lightweight Node.js web framework with TypeScript
 
-
 ## Routing
 GET routes are added with the `get` method and POST routes with the `post` method.
 You can specify a controller or a callback:
@@ -53,6 +52,11 @@ You can specify a controller as a callback:
 ```js
 app.post("/login", userController.login);
 ```
+
+## Content Types
+✅ application/json
+<br/>
+✅ application/x-www-form-urlencoded
 
 ## License
 
