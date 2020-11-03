@@ -32,6 +32,12 @@ export class Application implements IApplication {
         this.activeRoute.setMiddleware(middleware);
     }
 
+    private errorResponse(res: ServerResponse, errorMessage: string) {
+        res.writeHead(404, {'Content-Type': 'application/json'});
+        res.write(JSON.stringify({ error: errorMessage }));
+        res.end();
+    }
+
     private listener = (req: IncomingMessage, res: ServerResponse) => {
         if (req.url === '/favicon.ico') {
             res.writeHead(200, {'Content-Type': 'image/x-icon'} );
@@ -42,14 +48,23 @@ export class Application implements IApplication {
         let data = '';
         req.on('data', chunk => {
             data += chunk;
-        })
+        });
         req.on('end', () => {
             if (!data) {
                 return false;
             }
+            try {
+                this.router.run(req, res, data);
+            } catch (e) {
+                this.errorResponse(res, e.message);
+            }
+        });
+
+        try {
             this.router.run(req, res, data);
-        })
-        this.router.run(req, res, data);
+        } catch (e) {
+            this.errorResponse(res, e.message);
+        }
     }
 
     public listen(port: number, host: string = "localhost"): void {
