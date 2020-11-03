@@ -10,23 +10,22 @@ export class Request {
     constructor(request: IncomingMessage, queryParameters: { [key: string]: string } | {}, body: string | '') {
         this.request = request;
         this.query = queryParameters;
-        this.body = this.parseBody(body);
+        if (request.headers['content-type']) {
+            this.body = this.parseBody(request.headers['content-type'], body);
+        }
     }
 
-    private parseBody(body: string): QueryString.ParsedQs | { [key: string]: any }{
-        const isJson = this.isJson(body);
-        if (isJson) {
-            return JSON.parse(body);
+    private parseBody(contentType: string, body: string): QueryString.ParsedQs | { [key: string]: any }{
+        if (contentType === 'application/json') {
+            try {
+                return JSON.parse(body);
+            } catch (e) {
+                return {};
+            }
         }
-        return qs.parse(body);
-    }
-
-    private isJson(str: string): boolean {
-        try {
-            JSON.parse(str);
-        } catch (e) {
-            return false;
+        if (contentType === 'application/x-www-form-urlencoded') {
+            return qs.parse(body);
         }
-        return true;
+        return {};
     }
 }
