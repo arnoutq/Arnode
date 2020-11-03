@@ -47,10 +47,9 @@ export class Application implements IApplication {
             if (!data) {
                 return false;
             }
-            this.router.run(req, res);
+            this.router.run(req, res, data);
         })
-
-        this.router.run(req, res);
+        this.router.run(req, res, data);
     }
 
     public listen(port: number, host: string = "localhost"): void {
