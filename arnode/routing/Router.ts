@@ -7,7 +7,7 @@ import {Response} from "../http/Response";
 export interface IRouter {
     addGet(path: string, callback: Function): void;
     addPost(path: string, callback: Function): void;
-    run(req: IncomingMessage, res: ServerResponse, body: string | undefined): void;
+    run(req: IncomingMessage, res: ServerResponse, body: string | ''): false | void;
 }
 
 export class Router implements IRouter {
@@ -36,21 +36,6 @@ export class Router implements IRouter {
         return route;
     }
 
-    private call(middleware: Function | undefined, callback: Function, request: Request, response: Response) {
-        if (typeof middleware === "function") {
-            middleware();
-        }
-        return callback(request, response);
-    }
-
-    private getRequestClass(req: IncomingMessage, parameters: { [key: string]: string } | {}, body: string | '') {
-        return new Request(req, parameters, body);
-    }
-
-    private getResponseClass(res: ServerResponse) {
-        return new Response(res);
-    }
-
     private getPath(path: string | undefined): string {
         if (!path) {
             throw new Error("path is not defined");
@@ -69,7 +54,22 @@ export class Router implements IRouter {
         return method as "GET" | "POST";
     }
 
-    public run(req: IncomingMessage, res: ServerResponse, body: string | '') {
+    private getRequestClass(req: IncomingMessage, parameters: { [key: string]: string } | {}, body: string | ''): Request {
+        return new Request(req, parameters, body);
+    }
+
+    private getResponseClass(res: ServerResponse): Response {
+        return new Response(res);
+    }
+
+    private call(middleware: Function | undefined, callback: Function, request: Request, response: Response): Function {
+        if (typeof middleware === "function") {
+            middleware();
+        }
+        return callback(request, response);
+    }
+
+    public run(req: IncomingMessage, res: ServerResponse, body: string | ''): false | void {
         const path = this.getPath(req.url);
         const method = this.getMethod(req.method);
         if (method !== "GET" && !body) {
