@@ -36,14 +36,6 @@ export class Router implements IRouter {
         return route;
     }
 
-    private getValidMethod(method: string): "GET" | "POST" | false {
-        const isValidMethod = Object.keys(this.routes).includes(method);
-        if (!isValidMethod) {
-            return false;
-        }
-        return method as "GET" | "POST";
-    }
-
     private call(middleware: Function | undefined, callback: Function, request: Request, response: Response) {
         if (typeof middleware === "function") {
             middleware();
@@ -59,24 +51,32 @@ export class Router implements IRouter {
         return new Response(res);
     }
 
-    public run(req: IncomingMessage, res: ServerResponse, body: string | '') {
-        const path = req.url;
-        const method = req.method;
+    private getPath(path: string | undefined): string {
         if (!path) {
             throw new Error("path is not defined");
         }
+        return path;
+    }
+
+    private getMethod(method: string | undefined): "GET" | "POST" {
         if (!method) {
             throw new Error("Method is not defined");
         }
+        const isValidMethod = Object.keys(this.routes).includes(method);
+        if (!isValidMethod) {
+            throw new Error("Method is not valid");
+        }
+        return method as "GET" | "POST";
+    }
+
+    public run(req: IncomingMessage, res: ServerResponse, body: string | '') {
+        const path = this.getPath(req.url);
+        const method = this.getMethod(req.method);
         if (method !== "GET" && !body) {
             return false;
         }
 
-        const validMethod = this.getValidMethod(method);
-        if (!validMethod) {
-            throw new Error("Method is not valid");
-        }
-        const matchedRoute = this.routeMatch.getMatchedRoute(this.routes, validMethod, path);
+        const matchedRoute = this.routeMatch.getMatchedRoute(this.routes, method, path);
         if (!matchedRoute) {
             throw new Error("Route not found: " + path);
         }
