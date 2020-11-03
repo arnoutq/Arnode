@@ -1,8 +1,8 @@
 import { Application } from "./arnode/Application";
 import { Router } from "./arnode/routing/Router";
-import {Request} from "./arnode/http/Request";
-import {RouteMatch} from "./arnode/routing/RouteMatch";
-import {Response} from "./arnode/http/Response";
+import { Request } from "./arnode/http/Request";
+import { RouteMatch } from "./arnode/routing/RouteMatch";
+import { Response } from "./arnode/http/Response";
 
 const app = new Application(new Router(new RouteMatch()));
 

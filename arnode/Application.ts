@@ -1,7 +1,7 @@
 import * as http from "http";
 import { Router } from "./routing/Router";
 import { IncomingMessage, ServerResponse } from "http";
-import {Route} from "./routing/Route";
+import { Route } from "./routing/Route";
 
 export interface IApplication {
     get(path: string, callback: Function): void;

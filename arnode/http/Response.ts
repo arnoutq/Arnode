@@ -1,4 +1,4 @@
-import {ServerResponse} from "http";
+import { ServerResponse } from "http";
 
 export interface IResponse {
     html(htmlCode: string, statusCode: number): void;

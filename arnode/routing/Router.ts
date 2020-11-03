@@ -1,8 +1,8 @@
-import {Route} from "./Route";
-import {Request} from "../http/Request";
-import {RouteMatch} from "./RouteMatch";
-import {IncomingMessage, ServerResponse} from "http";
-import {Response} from "../http/Response";
+import { Route } from "./Route";
+import { Request } from "../http/Request";
+import { RouteMatch } from "./RouteMatch";
+import { IncomingMessage, ServerResponse } from "http";
+import { Response } from "../http/Response";
 
 export interface IRouter {
     addGet(path: string, callback: Function): void;

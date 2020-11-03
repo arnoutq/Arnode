@@ -1,4 +1,4 @@
-import {Route} from "./Route";
+import { Route } from "./Route";
 
 export interface IRouteMatch {
     getMatchedRoute(routes: { GET: Array<Route>, POST: Array<Route>}, method: "GET" | "POST", path: string): Route;

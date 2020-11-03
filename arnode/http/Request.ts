@@ -1,4 +1,4 @@
-import {IncomingMessage} from "http";
+import { IncomingMessage } from "http";
 import qs from 'qs';
 import QueryString from "qs";
 
