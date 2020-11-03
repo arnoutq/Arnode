@@ -26,10 +26,16 @@ app.post("/login", (req: Request)=> { console.log(req.body.testform) });
 **Response**:
 ```js
 app.get("/", (req: Request, res: Response) => { 
-  res.html("<h1>html text</h1>");
+  res.html("<h1>HTML response</h1>");
+});
+
+app.get("/", (req: Request, res: Response) => { 
+  res.json( {text: 'JSON response'} );
 });
 ```
 `res.html`can be used to render HTML
+<br/>
+`res.json`can be used to render JSON
 
 
 ## Middleware
