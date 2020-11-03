@@ -17,4 +17,11 @@ export class Response implements IResponse {
         res.write(htmlCode);
         res.end();
     }
+
+    public json(json: object): void {
+        const res = this.response;
+        res.writeHead(200, {'Content-Type': 'application/json'});
+        res.write(JSON.stringify(json));
+        res.end();
+    }
 }
