@@ -6,12 +6,10 @@ import {Response} from "./arnode/http/Response";
 
 const app = new Application(new Router(new RouteMatch()));
 
-app.get("/", ()=> { console.log("test1") }).middleware(() => { console.log("middleware1") });
-app.get("/test/:id/:id2", (req: Request, res: Response)=> {
+app.get("/", (req: Request, res: Response)=> {
     res.html("<form method='POST' action='/test'><input name='testform'><input name='testform2'><button type='submit'>Submit</button></form>");
-}).middleware(() => { console.log("middleware2") });
-
+});
 app.post("/test", (req: Request)=> { console.log(req.body.testform) });
-
+app.get("/middleware", ()=> { console.log("test") }).middleware(() => { console.log("middleware") });
 
 app.listen(8080);
